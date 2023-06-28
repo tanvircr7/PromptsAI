@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
 import SearchIcon from "@mui/icons-material/Search";
-import TagIcon from "@mui/icons-material/Tag";
+import HomeIcon from "@mui/icons-material/Tag";
 
 const PromptCardList = ({ data, handleTagClick }) => {
 	return (
@@ -23,8 +23,13 @@ const Feed = () => {
 	const [searchText, setSearchText] = useState("");
 	const [posts, setPosts] = useState([]);
 	const [feedPosts, setFeedPosts] = useState([]);
+	const refreshRate = 1000; // 16.6 minutes
 	const handleSearchChange = (e) => {
 		setSearchText(e.target.value);
+	};
+	const handleFormSubmit = (e) => {
+		e.preventDefault();
+		filterPrompts();
 	};
 
 	// I keep forgetting useEffect( () => { everything else }, reactingThing)
@@ -76,8 +81,8 @@ const Feed = () => {
 
 	return (
 		<section className="feed">
-			<form className="relative w-full flex-center">
-				<TagIcon onClick={fetchOldPosts} />
+			<form onSubmit={handleFormSubmit} className="relative w-full flex-center">
+				<HomeIcon onClick={fetchOldPosts} />
 				<input
 					type="text"
 					placeholder="search for a tag or username"
