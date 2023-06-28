@@ -54,10 +54,9 @@ const Feed = () => {
 			console.log("1");
 			return;
 		}
-		setPosts(feedPosts);
 
 		const regex = new RegExp(searchText, "i"); // 'i' flag for case-insensitive search
-		const newPosts = posts.filter(
+		const newPosts = feedPosts.filter(
 			(item) =>
 				regex.test(item.creator.username) ||
 				regex.test(item.tag) ||
