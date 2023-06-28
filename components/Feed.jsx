@@ -35,12 +35,6 @@ const Feed = () => {
 
 	// I keep forgetting useEffect( () => { everything else }, reactingThing)
 	// it needs a function for everything else
-
-	const fetchOldPosts = () => {
-		setPosts(feedPosts);
-		console.log("fetch OLD POSTS");
-	};
-
 	const fetchPosts = async () => {
 		const res = await fetch(`/api/prompt`);
 		const data = await res.json(); // .json() also needs to be Await
@@ -52,15 +46,13 @@ const Feed = () => {
 
 	useEffect(() => {
 		fetchPosts();
-		console.log(1);
+		// console.log(1);
 	}, []);
 
 	const filterPrompts = () => {
 		if (searchText === "") {
-			console.log("1");
 			return;
 		}
-
 		const regex = new RegExp(searchText, "i"); // 'i' flag for case-insensitive search
 		const newPosts = feedPosts.filter(
 			(item) =>
@@ -75,8 +67,8 @@ const Feed = () => {
 
 	const handleTagClick = (searchTag) => {
 		const regex = new RegExp(searchTag, "i"); // 'i' flag for case-insensitive search
-		setPosts(feedPosts);
-		const newPosts = posts.filter((item) => regex.test(item.tag));
+
+		const newPosts = feedPosts.filter((item) => regex.test(item.tag));
 		setPosts(newPosts);
 	};
 
@@ -87,7 +79,7 @@ const Feed = () => {
 				className="relative w-full flex-center space-x-2"
 			>
 				<div className="cursor-pointer">
-					<HomeIcon onClick={fetchOldPosts} />
+					<HomeIcon onClick={fetchPosts} />
 				</div>
 				<input
 					type="text"
