@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
 import SearchIcon from "@mui/icons-material/Search";
-import HomeIcon from "@mui/icons-material/Tag";
+import TagIcon from "@mui/icons-material/Tag";
+import HomeIcon from "@mui/icons-material/Home";
 
 const PromptCardList = ({ data, handleTagClick }) => {
 	return (
@@ -81,8 +82,13 @@ const Feed = () => {
 
 	return (
 		<section className="feed">
-			<form onSubmit={handleFormSubmit} className="relative w-full flex-center">
-				<HomeIcon onClick={fetchOldPosts} />
+			<form
+				onSubmit={handleFormSubmit}
+				className="relative w-full flex-center space-x-2"
+			>
+				<div className="cursor-pointer">
+					<HomeIcon onClick={fetchOldPosts} />
+				</div>
 				<input
 					type="text"
 					placeholder="search for a tag or username"
@@ -91,7 +97,9 @@ const Feed = () => {
 					required
 					className="search_input peer"
 				/>
-				<SearchIcon onClick={filterPrompts} />
+				<div className="cursor-pointer">
+					<SearchIcon onClick={filterPrompts} />
+				</div>
 			</form>
 
 			<PromptCardList data={posts} handleTagClick={handleTagClick} />
