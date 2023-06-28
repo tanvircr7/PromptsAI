@@ -5,6 +5,12 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import StarsIcon from "@mui/icons-material/Stars";
+// import { styled } from "@material-ui/core/styles";
+
+const CustomStarsIcon = () => {
+	return <StarsIcon style={{ color: "purple" }} />;
+};
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 	const { data: session } = useSession();
@@ -67,6 +73,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 			</div>
 
 			<p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
+			{/* <CustomStarsIcon /> */}
 			<p
 				className="font-inter text-sm blue_gradient cursor-pointer"
 				onClick={() => handleTagClick && handleTagClick(post.tag)}
