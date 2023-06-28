@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import SearchIcon from "@mui/icons-material/Search";
+import TagIcon from "@mui/icons-material/Tag";
 
 const PromptCardList = ({ data, handleTagClick }) => {
 	return (
@@ -20,26 +22,63 @@ const PromptCardList = ({ data, handleTagClick }) => {
 const Feed = () => {
 	const [searchText, setSearchText] = useState("");
 	const [posts, setPosts] = useState([]);
+	const [feedPosts, setFeedPosts] = useState([]);
 	const handleSearchChange = (e) => {
-		e.preventDefault();
+		setSearchText(e.target.value);
 	};
 
 	// I keep forgetting useEffect( () => { everything else }, reactingThing)
 	// it needs a function for everything else
+
+	const fetchOldPosts = () => {
+		setPosts(feedPosts);
+		console.log("fetch OLD POSTS");
+	};
+
+	const fetchPosts = async () => {
+		const res = await fetch(`/api/prompt`);
+		const data = await res.json(); // .json() also needs to be Await
+
+		setSearchText("");
+		setPosts(data);
+		setFeedPosts(data);
+	};
+
 	useEffect(() => {
-		const fetchPosts = async () => {
-			const res = await fetch("/api/prompt");
-			const data = await res.json(); // .json() also needs to be Await
-
-			setPosts(data);
-		};
-
 		fetchPosts();
+		console.log(1);
 	}, []);
+
+	const filterPrompts = () => {
+		if (searchText === "") {
+			console.log("1");
+			return;
+		}
+		setPosts(feedPosts);
+
+		const regex = new RegExp(searchText, "i"); // 'i' flag for case-insensitive search
+		const newPosts = posts.filter(
+			(item) =>
+				regex.test(item.creator.username) ||
+				regex.test(item.tag) ||
+				regex.test(item.prompt)
+		);
+		setPosts(newPosts);
+	};
+
+	// useEffect(filterPrompts, [posts]);
+
+	const handleTagClick = (searchTag) => {
+		const regex = new RegExp(searchTag, "i"); // 'i' flag for case-insensitive search
+		setPosts(feedPosts);
+		const newPosts = posts.filter((item) => regex.test(item.tag));
+		setPosts(newPosts);
+	};
 
 	return (
 		<section className="feed">
 			<form className="relative w-full flex-center">
+				<TagIcon onClick={fetchOldPosts} />
 				<input
 					type="text"
 					placeholder="search for a tag or username"
@@ -48,9 +87,10 @@ const Feed = () => {
 					required
 					className="search_input peer"
 				/>
+				<SearchIcon onClick={filterPrompts} />
 			</form>
 
-			<PromptCardList data={posts} handleTagClick={() => {}} />
+			<PromptCardList data={posts} handleTagClick={handleTagClick} />
 		</section>
 	);
 };
